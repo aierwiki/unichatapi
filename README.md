@@ -95,5 +95,5 @@ brew install --cask chatall
 
 如果您喜欢这个项目，可以通过以下方式支持：
 
-<img src="https://sunner.cn/sponsor/alipay.jpg" width="200" />
-<img src="https://sunner.cn/sponsor/wepay.jpg" width="200" />
+<img src="assets/weixin.jpeg" width="200" />
+<img src="assets/zhifubao.jpeg" width="200" />
