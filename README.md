@@ -1,5 +1,5 @@
 <div align="center">
-   <img src="src/assets/logo-cover.png" width=256></img>
+   <img src="assets/uni.jpeg" width=256></img>
    <p><strong>通过统一的接口调用不同的大语言模型API</strong></p>
 
 [English](README.md) | 简体中文
