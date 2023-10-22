@@ -9,86 +9,48 @@
 
 ## 功能
 
-基于大型语言模型（LLMs）的 AI 机器人非常神奇。然而，它们的行为可能是随机的，不同的机器人在不同的任务上表现也有差异。如果你想获得最佳体验，不要一个一个尝试。ChatALL（中文名：齐叨）可以把一条指令同时发给多个 AI，帮助您发现最好的回答。你需要做的只是[下载、安装](https://github.com/sunner/ChatALL/releases)和提问。
+在这个百模大战的时代，每家的大模型都开发了自己的SDK，而作为应用方，我们可能会需要接入多个不同的模型去白嫖免费的token额度，或者比较不同大模型的效果，开发接入各家LLM的代码是一件繁琐且无趣的事情。另外一个问题是大家的SDK的使用方式都有点恶心，不够直接了当。在这种背景下我开发了UniChatAPI项目，本项目旨在提供一个简洁的SDK，快速接入不同厂家的LLM。你需要做的只是[下载、安装](https://github.com/aierwiki/unichatapi)和提问。
 
 ### 这是你吗？
 
-ChatALL 的典型用户是：
+UniChatAPI 的典型用户是：
 
-- 🤠**大模型重度玩家**，希望从大模型找到最好的答案，或者最好的创作
-- 🤓**大模型研究者**，直观比较各种大模型在不同领域的优劣
-- 😎**大模型应用开发者**，快速调试 prompt，寻找表现最佳的基础模型
+- 🤠**羊毛党**，希望白嫖各种大模型，来实现自己的应用。
+- 🤓**大模型调研**，快速接入各种大模型，比较各种大模型在不同领域的优劣
+- 😎**大模型应用开发者**，快速调试 prompt，快速搭建自己的应用Demo
 
 ### 支持的 AI
 
-| AI 机器人                                                    | 网页访问 | API      | 说明                                     |
-| ------------------------------------------------------------ | -------- | -------- | ---------------------------------------- |
-| [ChatGPT](https://chat.openai.com)                           | 支持     | 支持     | 包含 Web Browsing、Azure OpenAI service  |
-| [Bing Chat](https://www.bing.com/new)                        | 支持     | 无 API   | 不需要帐号                               |
-| [文心一言](https://yiyan.baidu.com/)                         | 否       | 支持     |                                          |
-| [Bard](https://bard.google.com/)                             | 支持     | 即将推出 |                                          |
-| [Poe](https://poe.com/)                                      | 支持     | 即将推出 |                                          |
-| [MOSS](https://moss.fastnlp.top/)                            | 支持     | 无 API   |                                          |
-| [通义千问](http://tongyi.aliyun.com/)                        | 支持     | 即将推出 |                                          |
-| [得到学习助手](https://ai.dedao.cn/)                         | 即将推出 | 无 API   |                                          |
-| [讯飞星火](http://xinghuo.xfyun.cn/)                         | 支持     | 即将推出 |                                          |
-| [Alpaca](https://crfm.stanford.edu/2023/03/13/alpaca.html)   | 支持     | 无 API   | 不需要帐号                               |
-| [Vicuna](https://lmsys.org/blog/2023-03-30-vicuna/)          | 支持     | 无 API   | 不需要帐号                               |
-| [ChatGLM](https://chatglm.cn/blog)                           | 支持     | 无 API   | 不需要帐号                               |
-| [Claude](https://www.anthropic.com/index/introducing-claude) | 支持     | 无 API   | 不需要帐号                               |
-| [Gradio](httpps://gradio.app/)                               | 支持     | 无 API   | 用于 Hugging Face space 或自己部署的模型 |
-| [HuggingChat](https://huggingface.co/chat/)                  | 支持     | 无 API   |
-| [天工](https://neice.tiangong.cn/)                           | 支持     | 即将推出 |                                          |
-| [You](https://you.com/)                                      | 支持     | 无 API   |                                          |
-| [Pi](https://pi.ai)                                          | 支持     | 无 API   |                                          |
-| [360 智脑](https://ai.360.cn/)                               | 支持     | 无       |                                          |
-| [YouChat](https://you.com/)                                  | 支持     | 无       |                                          |
-| [Open Assistant](https://open-assistant.io/)                 | 支持     | 无       |                                          |
-| [Claude](https://claude.ai/)                                 | 支持     | 无       |                                          |
-| [Character.AI](https://character.ai/)                        | 支持     | 无       |                                          |
+| AI 机器人                                                     | 是否支持API      | 说明                                     |
+| ------------------------------------------------------------ | -------- | ---------------------------------------- |
+| [ChatGPT](https://chat.openai.com)                           |      |                              |
+| [智谱AI](https://zhipuai.cn/)                                 | ✅      |                              |
+| [文心一言](https://yiyan.baidu.com/)                          | ✅       |                                          |
+| [Bard](https://bard.google.com/)                              |     |                                          |
+| [通义千问](http://tongyi.aliyun.com/)                         | ✅     |       |
+| [讯飞星火](http://xinghuo.xfyun.cn/)                          |      |           |
+| [天工](https://neice.tiangong.cn/)                            |      |                    |
+| [360 智脑](https://ai.360.cn/)                                |      |                      |
+| [Claude](https://claude.ai/)                                 |      |                           |
 
-还会有更多。[到这里](https://github.com/sunner/ChatALL/labels/more%20LLMs)为你喜欢的 AI 投票吧。
-
-### 其他功能
-
-- 快问模式：不需要等待前面的请求完成，就可以发下一条指令
-- 对话历史保存在本地，保护你的隐私
-- 高亮喜欢的答案，删除不需要的答案
-- 随时启用/禁用任何机器人
-- 在一列、两列或三列视图之间切换
-- 自动更新到最新版
-- 夜间模式（由 @tanchekwei 贡献）
-- 快捷键。按 `Ctrl + /` 可以看到所有快捷键（由 @tanchekwei 贡献）
-- 多对话窗口（由 @tanchekwei 贡献）
-- 支持设置代理（由 @msaong 贡献）
-- 提示词管理（由 @tanchekwei 贡献）
-- 支持多语言（中文、英语、德语、法语、俄语、越南语、韩语、日语、西班牙语、意大利语）
-- 支持 Windows，macOS 和 Linux
-
-计划中：
-
-欢迎参与这些功能的开发。
-
-- [ ] 把前端部署到 GitHub Pages
 
 ## 预先需要
 
-ChatALL 是一个客户端，而不是代理。因此，您必须：
+UniChatAPI 是一个LLM接入SDK，而不是代理。因此，您必须：
 
 1. 拥有可以访问这些 AI 的帐号，或 API token。
 2. 与 AI 网站有可靠的网络连接。
 
 ## 下载 / 安装
 ```bash
-brew install --cask chatall
+pip install unichatpai
 ```
 
 ## 致谢
 
 ### 贡献者
-
-<a href="https://github.com/sunner/ChatALL/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=sunner/ChatALL" />
+<a href="https://github.com/aierwiki/unichatapi/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=aierwiki/unichatapi" />
 </a>
 
 ## 赞助
