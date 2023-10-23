@@ -1,6 +1,5 @@
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from unichatapi.llm import LLM
 from unichatapi.llm import ChatGLM
 from loguru import logger
