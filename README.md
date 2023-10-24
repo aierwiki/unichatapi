@@ -19,7 +19,7 @@ UniChatAPI 的典型用户是：
 - 🤓**大模型调研**，快速接入各种大模型，比较各种大模型在不同领域的优劣
 - 😎**大模型应用开发者**，快速调试 prompt，快速搭建自己的应用Demo
 
-### 支持的 AI
+### 支持的 LLM
 
 | AI 机器人                                                     | 是否支持API      | 说明                                     |
 | ------------------------------------------------------------ | -------- | ---------------------------------------- |
@@ -28,6 +28,20 @@ UniChatAPI 的典型用户是：
 | [文心一言](https://yiyan.baidu.com/)                          | ✅       |                                          |
 | [Bard](https://bard.google.com/)                              |     |                                          |
 | [通义千问](http://tongyi.aliyun.com/)                         | ✅     |       |
+| [讯飞星火](http://xinghuo.xfyun.cn/)                          |      |           |
+| [天工](https://neice.tiangong.cn/)                            |      |                    |
+| [360 智脑](https://ai.360.cn/)                                |      |                      |
+| [Claude](https://claude.ai/)                                 |      |                           |
+
+### 支持的Embedding
+
+| AI 机器人                                                     | 是否支持API      | 说明                                     |
+| ------------------------------------------------------------ | -------- | ---------------------------------------- |
+| [OpenAI](https://openai.com)                                |   ✅   |                              |
+| [智谱清言](https://zhipuai.cn/)                                 |       |                              |
+| [文心一言](https://yiyan.baidu.com/)                          |        |                                          |
+| [Bard](https://bard.google.com/)                              |     |                                          |
+| [通义千问](http://tongyi.aliyun.com/)                         |     |       |
 | [讯飞星火](http://xinghuo.xfyun.cn/)                          |      |           |
 | [天工](https://neice.tiangong.cn/)                            |      |                    |
 | [360 智脑](https://ai.360.cn/)                                |      |                      |
@@ -44,6 +58,41 @@ UniChatAPI 是一个LLM接入SDK，而不是代理。因此，您必须：
 ## 下载 / 安装
 ```bash
 pip install unichatpai
+```
+
+## 使用
+
+### 对接聊天机器人
+
+```python
+import os
+from loguru import logger
+from unichatapi.llm import LLM
+
+
+api_key = os.getenv("ZHIPU_API_KEY")
+if api_key is None:
+    raise Exception("api_key not provided, you could provide it with `shell: export API_KEY=xxx` or `code: zhipuai.api_key=xxx`")
+llm = LLM.from_llm_type('chatglm', api_key=api_key)
+response = llm.ask('你好')
+logger.info(response)
+```
+
+### 对接文本向量化模型
+
+```python
+import os
+from loguru import logger
+from unichatapi.llm import LLM
+
+
+api_key = "123456"
+api_base = "http://localhost:3003/v1"
+emb_model = Embedding.from_emb_type('openai', api_key=api_key, api_base=api_base)
+res = emb_model.encode("你好")
+logger.info(res)
+res = emb_model.encode(["你好", "你好啊"])
+logger.info(res)
 ```
 
 ## 致谢

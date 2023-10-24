@@ -38,7 +38,7 @@ class OpenAI(Embedding):
                     input=input,
                     encoding_format="float",
                     timeout=timeout,
-                    is_query=is_query
+                    is_query=is_query       # is_query maybe not work, see https://platform.openai.com/docs/api-reference/embeddings/create
                     )
         if isinstance(input, str):
             embeddings = response.data[0].embedding
