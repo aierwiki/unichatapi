@@ -27,13 +27,24 @@ class LLM:
         
         if llm_type == 'chatglm':
             from .chatglm import ChatGLM
-            ChatGLM.check_config(**kwargs)
+            ok = ChatGLM.check_config(**kwargs)
+            if not ok:
+                logger.error(ChatGLM.config_info())
+                raise ValueError(f"llm_type {llm_type} config error !")
             return ChatGLM(**kwargs)
         elif llm_type == 'qwen':
             from .qwen import Qwen
+            ok = Qwen.check_config(**kwargs)
+            if not ok:
+                logger.error(Qwen.config_info())
+                raise ValueError(f"llm_type {llm_type} config error !")
             return Qwen(**kwargs)
         elif llm_type == 'erniebot':
             from .erniebot import ErnieBot
+            ok = ErnieBot.check_config(**kwargs)
+            if not ok:
+                logger.error(ErnieBot.config_info())
+                raise ValueError(f"llm_type {llm_type} config error !")
             return ErnieBot(**kwargs)
         else:
             raise ValueError(f"llm_type {llm_type} not supported !")

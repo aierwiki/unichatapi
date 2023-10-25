@@ -1,18 +1,17 @@
 from typing import List, Tuple, Union, Generator
+import qianfan
 from loguru import logger
-import requests
-import json
 from .base import LLM
 
 
 class ErnieBot(LLM):
-    def __init__(self, api_key, model_name="ernie-bot-turbo") -> None:
+    def __init__(self, api_key, secret_key, model_name="ERNIE-Bot-turbo") -> None:
         super().__init__()
         self.llm_type = 'erniebot'
-        # curl 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=【API Key】&client_secret=【Secret Key】'
-        self.api_key = api_key  # api_key is actually access_token get from above curl command
+        self.api_key = api_key
+        self.secret_key = secret_key
         self.model_name = model_name
-        self.api = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token={self.api_key}"
+        self.chat_comp = qianfan.ChatCompletion(ak=self.api_key, sk=self.secret_key)
 
     def ask_stream(self, query: str, history: List[Tuple[str]] = [], incremental: bool = False,
                    temperature: float = 0.5, top_p: float = 0.7, presence_penalty: float = 0,
@@ -25,35 +24,25 @@ class ErnieBot(LLM):
             messages.append({"role": "user", "content": q})
             messages.append({"role": "assistant", "content": a})
         messages.append({"role": "user", "content": query})
-        data = {"messages": messages, "stream": True}
-        logger.info(f"erniebot final prompt: {data}")
-        response = requests.post(self.api, json=data, stream=True, timeout=timeout)
-        all_content = ""
-        data = b""
-        for chunk in response:
-            for line in chunk.splitlines(True):
-                data += line
-                if data.endswith((b"\r\r", b"\n\n", b"\r\n\r\n")):
-                    line_str = data.decode()
-                    json_str = line_str[6:]
-                    json_data = json.loads(json_str)
-                    text = json_data["result"]
-                    if incremental:
-                        yield text
-                    else:
-                        all_content += text
-                        yield all_content
-                    data = b""
-        if data:
-            line_str = data.decode()
-            json_str = line_str[6:]
-            json_data = json.loads(json_str)
-            text = json_data["result"]
+        if isinstance(timeout, tuple):
+            timeout = timeout[0]
+        penalty_score = max(1.0, min(presence_penalty + 1.0, 2.0))
+        resp = self.chat_comp.ado(model=self.model_name, messages=messages, stream=True, 
+                                  temperature=temperature, top_p=top_p, penalty_score=penalty_score,
+                                  request_timeout=timeout)
+        total_result = ""
+        for r in resp:
+            if r['code'] != 200:
+                logger.error('Code: %d' % (r['code']))
+                raise Exception('API ERROR')
+            result = r['result']
+            total_result += result
             if incremental:
-                yield text
+                yield result
             else:
-                all_content += text
-                yield all_content
+                yield total_result
+
+        
         
     def ask(self, query: str, history: List[Tuple[str]] = [],
             temperature: float = 0.5, top_p: float = 0.7, presence_penalty: float = 0,
@@ -68,9 +57,16 @@ class ErnieBot(LLM):
         messages.append({"role": "user", "content": query})
         data = {"messages": messages, "stream": False}
         logger.info(f"erniebot final prompt: {data}")
-        response = requests.post(self.api, json=data, timeout=timeout)
-        json_data = response.json()
-        text = json_data["result"]
+        if isinstance(timeout, tuple):
+            timeout = timeout[0]
+        penalty_score = max(1.0, min(presence_penalty + 1.0, 2.0))
+        resp = self.chat_comp.do(model=self.model_name, messages=messages, stream=False, 
+                                  temperature=temperature, top_p=top_p, penalty_score=penalty_score,
+                                  request_timeout=timeout)
+        if resp['code'] != 200:
+            logger.error('Code: %d' % (resp['code']))
+            raise Exception('API ERROR')
+        text = resp['body']['result']
         return text
     
     @classmethod
@@ -78,6 +74,7 @@ class ErnieBot(LLM):
         info = """
         erniebot config info:
         api_key: None (required)
+        secret_key: None (required)
         model_name: ernie-bot-turbo
         """
         return info
@@ -85,6 +82,8 @@ class ErnieBot(LLM):
     @classmethod
     def check_config(cls, **kwargs)->bool:
         if kwargs.get("api_key", None) is None:
+            return False
+        if kwargs.get("secret_key", None) is None:
             return False
         return True
             
