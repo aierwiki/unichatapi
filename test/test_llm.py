@@ -73,12 +73,25 @@ def test_erniebot4():
     logger.info(res)
 
 
+def test_skywork():
+    api_key = os.getenv("SKYWORK_API_KEY")
+    secret_key = os.getenv("SKYWORK_SECRET_KEY")
+    if api_key is None:
+        raise Exception("api_key not provided, you could provide it with `shell: export SKYWORK_API_KEY=xxx`")
+    if secret_key is None:
+        raise Exception("api_key not provided, you could provide it with `shell: export SKYWORK_SECRET_KEY=xxx`")
+    llm = LLM.from_llm_type('skywork', api_key=api_key, secret_key=secret_key)
+    res = llm.ask('你好')
+    logger.info(res)
+    logger.info("-------------")
+
+
 def main():
     # test_chatglm()
     # test_qwen()
     # test_erniebot()
-    test_erniebot4()
-
+    # test_erniebot4()
+    test_skywork()
 
 
 if __name__ == "__main__":

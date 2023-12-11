@@ -2,7 +2,7 @@ from typing import List, Tuple, Union, Generator
 from loguru import logger
 
 class LLM:
-    SUPORTED_LLMS = ['chatglm', 'qwen', 'erniebot', 'erniebot4']
+    SUPORTED_LLMS = ['chatglm', 'qwen', 'erniebot', 'erniebot4', 'skywork']
 
     def __init__(self) -> None:
         self.llm_type = None
@@ -53,6 +53,13 @@ class LLM:
                 logger.error(ErnieBot4.config_info())
                 raise ValueError(f"llm_type {llm_type} config error !")
             return ErnieBot4(**kwargs)
+        elif llm_type == 'skywork':
+            from .skywork import SkyWork
+            ok = SkyWork.check_config(**kwargs)
+            if not ok:
+                logger.error(SkyWork.config_info())
+                raise ValueError(f"llm_type {llm_type} config error !")
+            return SkyWork(**kwargs)
         else:
             raise ValueError(f"llm_type {llm_type} not supported !")
         
@@ -77,6 +84,11 @@ class LLM:
         elif llm_type == 'erniebot4':
             from .erniebot4 import ErnieBot4
             info = ErnieBot4.config_info()
+            logger.info(info)
+        elif llm_type == 'skywork':
+            from .skywork import SkyWork
+            info = SkyWork.config_info()
+            logger.info(info)
         else:
             raise ValueError(f"llm_type {llm_type} not supported !")
         
