@@ -43,7 +43,6 @@ class ErnieBot(LLM):
                 yield total_result
 
         
-        
     def ask(self, query: str, history: List[Tuple[str]] = [],
             temperature: float = 0.5, top_p: float = 0.7, presence_penalty: float = 0,
             frequency_penalty: float = 0, timeout: Tuple[float] | float = (15, 30), **kwargs) -> str:
@@ -60,7 +59,7 @@ class ErnieBot(LLM):
         if isinstance(timeout, tuple):
             timeout = timeout[0]
         penalty_score = max(1.0, min(presence_penalty + 1.0, 2.0))
-        resp = self.chat_comp.do(model=self.model_name, messages=messages, stream=False, 
+        resp = self.chat_comp.do(model=self.model_name, messages=messages, stream=False,
                                   temperature=temperature, top_p=top_p, penalty_score=penalty_score,
                                   request_timeout=timeout)
         if resp['code'] != 200:
